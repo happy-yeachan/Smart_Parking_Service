@@ -55,6 +55,8 @@ async def detection(file: UploadFile, idx: int):
     return {"car_count": car, "message": "Detection and update successful"}
 
 # 아래부터 클라이언트 통신
+
+# 전체 주차장 현황 반환
 @app.get("/ParkingLots/", response_model=List[Lot])
 async def read_lots():
     with engine.connect() as conn:
@@ -62,7 +64,7 @@ async def read_lots():
         parking_list = result.fetchall()
         return [Lot(id=row[0], name=row[1], image=row[2], cnt = row[3]) for row in parking_list]
 
-
+# 하나의 주차장 현황 반환
 @app.get("/ParkingLots/{lot_id}", response_model=Lot)
 async def read_lot(lot_id: int):
     with engine.connect() as conn:
@@ -73,6 +75,7 @@ async def read_lot(lot_id: int):
         else:
             raise HTTPException(status_code=404, detail="User not found")
 
+# 주차장 추가
 @app.post("/ParkingLots/", response_model=Lots)
 async def create_lot(new_name: str):
     with engine.connect() as conn:
