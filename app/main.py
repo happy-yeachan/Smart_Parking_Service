@@ -75,7 +75,7 @@ async def read_lot(lot_id: int):
         else:
             raise HTTPException(status_code=404, detail="User not found")
 
-# 주차장 추가
+# 주차장 데이터 추가
 @app.post("/ParkingLots/", response_model=Lots)
 async def create_lot(new_name: str):
     with engine.connect() as conn:
@@ -84,6 +84,7 @@ async def create_lot(new_name: str):
         new_user_id = result.lastrowid
         return Lots(id=new_user_id, name=new_name) 
     
+# 주차장 데이터 삭제
 @app.delete("/ParkingLots/{lot_id}")
 async def delete_lot(id: int):
         with engine.connect() as conn:
