@@ -83,3 +83,10 @@ async def create_lot(new_name: str):
         conn.commit()
         new_user_id = result.lastrowid
         return Lots(id=new_user_id, name=new_name) 
+    
+@app.delete("/ParkingLots/{lot_id}")
+async def delete_lot(id: int):
+        with engine.connect() as conn:
+            result = conn.execute(delete(parkinglots).where(parkinglots.c.id == id))
+            conn.commit()
+        return {"message": "User deleted"}
